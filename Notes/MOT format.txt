@@ -1,0 +1,18 @@
+Định dạng GT (Ground Truth) của MOT17 
+Mỗi dòng của tệp GT chứa thông tin về một đối tượng được theo dõi trong một khung hình cụ thể của video. 
+Các giá trị trong mỗi dòng được phân tách bằng dấu phẩy và có ý nghĩa như sau:
+Demo:
+103,1,912,484,97,109,0,7,1
+104,1,912,484,97,109,0,7,1
+105,1,912,484,97,109,0,7,1
+Cột 1: frame ID - ID của khung hình trong đoạn video đang xét
+Cột 2: ID của đối tượng - Mỗi đối tượng được gán một ID duy nhất để theo dõi chúng qua các khung hình
+Cột 3-6: bounding box - tọa độ của khung giới hạn của đối tượng trong khung hình đó. 3-4: (x,y) trái trên, 5-6: (w, h) 
+Cột 7: Confidence score - Điểm tự tin cho việc dự đoán đối tượng đó trong khung hình. 
+Cột 8: Class ID - ID của lớp đối tượng đó thuộc về, ví dụ như người, xe, vật thể cố định, vv.
+Cột 9: Visibility ratio - Tỷ lệ khung giới hạn của đối tượng được nhìn thấy trong khung hình, có giá trị từ 0 đến 1. Giá trị 0 nghĩa là đối tượng bị ẩn hoàn toàn, giá trị 1 nghĩa là đối tượng được nhìn thấy toàn bộ.
+
+Định dạng MOT17 DET: 
+1, -1, 794.27, 247.59, 71.245, 174.88, 4.56
+1, -1, 1648.1, 119.61, 66.504, 163.24, 0.32
+1, -1, 875.49, 399.98, 95.303, 233.93, -1.34
