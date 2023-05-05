@@ -2,8 +2,9 @@ import os
 import cv2
 from ultralytics import YOLO
 from deepsort import deepSORT_Tracker
+import numpy as np
 
-frame_dir_path = r"datasets/MOT17/train/MOT17-02-SDP/img1"
+frame_dir_path = r"datasets/MOT15/train/TUD-Campus/img1"
 output_txt_path = "output.txt"
 video_out_path = os.path.join('.', 'output.mp4')
 
@@ -15,10 +16,10 @@ height, width, _ = first_frame.shape
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 fps = 30
 cap_out = cv2.VideoWriter(video_out_path, fourcc, fps, (width, height))
-
-model = YOLO("yolov8m.pt", task='detect')
+pts = {}
+model = YOLO("best_human.pt", task='detect')
 tracker = deepSORT_Tracker()
-detection_threshold = 0.5
+detection_threshold = 0.6
 
 with open(output_txt_path, 'w') as output_file:
     for i, frame_path in enumerate(frame_paths):
@@ -42,10 +43,21 @@ with open(output_txt_path, 'w') as output_file:
         for track in tracker.tracks:
             track_id, bbox = track
             x1, y1, x2, y2 = bbox
-            output_file.write(f"{i},{track_id},{x1},{y1},{x2-x1},{y2-y1}\n")
+            output_file.write(f"{i},{track_id},{x1},{y1},{int(x2-x1)},{int(y2-y1)}\n")
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (102,0,204), 2 )
             cv2.putText(frame, str(track_id), (int(x1), int(y1)), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0,0,255),2)
+            if track_id not in pts:
+                pts[track_id] = [(int((x1+x2)/2), int((y1+y2)/2))]
+            else:
+                pts[track_id].append((int((x1+x2)/2), int((y1+y2)/2)))
 
+            # Draw lines connecting the points in pts dictionary
+            color = (255, 160, 122)
+            for j in range(1, len(pts[track_id])):
+                if pts[track_id][j - 1] is None or pts[track_id][j] is None:
+                    continue
+                thickness = int(np.sqrt(64 / float(j + 1)) * 2)
+                cv2.line(frame, pts[track_id][j-1], pts[track_id][j], color, thickness)
         cap_out.write(frame)
 
 # Sort the output file by track_id

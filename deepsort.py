@@ -14,13 +14,13 @@ class deepSORT_Tracker:
         encoder_model_filename = r'resources/networks/mars-small128.pb'
         nn_budget = None 
         metric = nn_matching.NearestNeighborDistanceMetric('cosine', max_cosine_distance, nn_budget)
-        self.tracker = Tracker(metric)
+        self.tracker = Tracker(metric, max_age=30)
         self.encoder = generate_detections .create_box_encoder(encoder_model_filename, batch_size=1)
         
     def update_tracks(self):
         tracks = []
         for track in self.tracker.tracks:
-            if track.is_confirmed() and track.time_since_update <= 1:
+            if track.is_confirmed() and track.time_since_update <= 30:
                 bbox = track.to_tlbr()
                 id = track.track_id
                 tracks.append((id, bbox))
@@ -42,11 +42,3 @@ class deepSORT_Tracker:
         self.tracker.predict()
         self.tracker.update(dets)
         self.update_tracks()
-        
-        
-        
-        
-        
-        
-        
-        
