@@ -16,7 +16,7 @@ height, width, _ = first_frame.shape
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 fps = 30
 cap_out = cv2.VideoWriter(video_out_path, fourcc, fps, (width, height))
-pts = {}
+pts = {} 
 model = YOLO("best_human.pt", task='detect')
 tracker = deepSORT_Tracker()
 detection_threshold = 0.6

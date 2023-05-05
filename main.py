@@ -32,7 +32,7 @@ while True:
     # Update tracker with the detections and draw bounding boxes
     for result in results:
         detections = []
-        for r in result.boxes.data.tolist():
+        for r in result.boxes.data.tolist(): 
             x1, y1, x2, y2, score, class_id = r
             x1 = int(x1)
             x2 = int(x2)
