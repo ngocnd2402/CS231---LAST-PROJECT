@@ -6,6 +6,8 @@ from super_gradients.training import models
 from super_gradients.common.object_names import  Models
 from deepsort import deepSORT_Tracker 
 model = models.get("yolo_nas_l", pretrained_weights="coco")
+import warnings
+warnings.filterwarnings("ignore")
 
 # Load video and initialize video writer
 video_path = os.path.join('.', 'data', 'people.mp4')
@@ -26,10 +28,11 @@ while True:
     ret, frame = cap.read()
     if not ret:
         break
+    print(f"Processing frame {frame_id}")
     results = model.predict(frame)
-
+    detections = []
     for result in results:
-        detections = []
+        
         for i, r in enumerate(result.prediction.bboxes_xyxy):
             x1, y1, x2, y2 = r
             x1 = int(x1)
@@ -57,7 +60,7 @@ while True:
             for j in range(1, len(pts[track_id])):
                 if pts[track_id][j - 1] is None or pts[track_id][j] is None:
                     continue
-                thickness = int(np.sqrt(64 / float(j + 1)) * 2)
+                thickness = max(1, int(np.sqrt(64 / float(j + 1)) * 2))
                 cv2.line(frame, pts[track_id][j-1], pts[track_id][j], color, thickness)
 
     cap_out.write(frame)

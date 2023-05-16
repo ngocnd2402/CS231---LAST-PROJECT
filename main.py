@@ -2,8 +2,10 @@ import os
 import cv2
 import numpy as np
 from ultralytics import YOLO
+from super_gradients.training import models
+from super_gradients.common.object_names import  Models
 from deepsort import deepSORT_Tracker 
-model = YOLO("best_human.pt", task='detect')
+model = models.get("yolo_nas_l", pretrained_weights="coco")
 
 # Load video and initialize video writer
 video_path = os.path.join('.', 'data', 'people.mp4')
