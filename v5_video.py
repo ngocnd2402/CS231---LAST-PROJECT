@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 from deepsort import deepSORT_Tracker 
-model = YOLO("best_human_02.pt", task='detect')
+model = YOLO("yolov5l.pt", task='detect')
 # Load video and initialize video writer
 video_path = os.path.join('.', 'data', 'people.mp4')
 video_out_path = os.path.join('.', 'people_out.mp4')
